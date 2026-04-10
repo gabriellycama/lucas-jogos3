@@ -1,40 +1,64 @@
-def jogar_forca():
+import random as rd
+
+def  mensagem_inicial():
     print("-------------------------------")
     print("\nBem vindo ao jogo da forca!\n")
     print("-------------------------------")
-  #lista = ["_ _ _ _ _ _ _ _ _ _ _"]
-    arquivo = open("jogos_lucas/palavras.txt", "r")
+
+def selec_palavra_aletor():
+
+    arquivo = open("palavra.txt", "r")
     palavra = []
 
-    for linha in palavra:
+    for linha in arquivo:
         linha = linha.strip()
         palavra.append(linha)
 
     arquivo.close()
+    posicao = rd.randrange(0,len(palavra))
+    palavra_secreta =palavra[posicao]
+    return palavra_secreta
 
-    palavra_secreta = "processador".lower()
-    letras_acertadas = ["_" for letra in palavra_secreta]
+def letras_corretas(palavra_secreta):
+    return ["_" for letra in palavra_secreta]
+
+def entrada_dados():
+    chute = input("Escreva uma letra: ")
+    chute = chute.strip().lower()
+    return chute
+
+
+def chute_correto(palavra_secreta,chute,letras_acertadas):
+    index = 0
+    
+    for letra in palavra_secreta:
+        if chute == letra:
+            letras_acertadas[index] = letra
+            index += 1
+def jogar_forca():
+    mensagem_inicial()
+    palavra_secreta = selec_palavra_aletor()
+
+    letras_acertadas = letras_corretas(palavra_secreta)
+
     perdeu = False
     acertou = False
-    erros = 0 
-    while (not perdeu and not acertou):
-        chute = input("Escreva uma letra: ")
-        chute = chute.strip().lower()
+    erros = 0
 
+    #Enquanto não acertar a palavra secreta
+    while not perdeu and not acertou:
+        chute = entrada_dados()
         #index define a posição da letra
-        index = 0
         
         if chute in palavra_secreta:
-
-            for letra in palavra_secreta:
-                if chute == letra:
-                    letras_acertadas[index] =letra
-                index += 1
+           chute_correto(palavra_secreta,chute,letras_acertadas)
         else:
-            erros = erros + 1
-        perdeu = erros == 6 
+            erros += 1
+
+        perdeu = erros == 6
         acertou = "_" not in letras_acertadas
 
         print(letras_acertadas)
+
 if(__name__ == "__main__"):
     jogar_forca()
